@@ -21,15 +21,14 @@ classifier = Sequential()
 
 # Step 1
 classifier.add(Convolution2D(input_shape=(64, 64, 3), filters = 32, kernel_size=(3, 3), activation = 'relu'))
-classifier.add(Convolution2D(filters = 32, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(Convolution2D(input_shape=(64, 64, 3), filters = 64, kernel_size=(3, 3), activation = 'relu'))
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 2
-#classifier.add(Convolution2D(filters = 64, kernel_size=(3, 3), activation = 'relu'))
-#classifier.add(MaxPooling2D(pool_size=(2, 2)))
+classifier.add(Convolution2D(filters = 64, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
-classifier.add(Convolution2D(filters = 64, kernel_size=(3, 3), activation = 'relu'))
-classifier.add(Convolution2D(filters = 64, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(Convolution2D(filters = 128, kernel_size=(3, 3), activation = 'relu'))
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 3 - Flattening
