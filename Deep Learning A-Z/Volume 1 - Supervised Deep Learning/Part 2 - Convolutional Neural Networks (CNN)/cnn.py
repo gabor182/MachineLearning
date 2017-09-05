@@ -26,20 +26,20 @@ classifier.add(Convolution2D(filters = 32, kernel_size=(3, 3), activation = 'rel
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 2
-classifier.add(Convolution2D(filters = 64, kernel_size=(3, 3), activation = 'relu'))
-classifier.add(Convolution2D(filters = 64, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(Convolution2D(filters = 32, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(Convolution2D(filters = 32, kernel_size=(3, 3), activation = 'relu'))
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
-classifier.add(Convolution2D(filters = 128, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(Convolution2D(filters = 32, kernel_size=(3, 3), activation = 'relu'))
+classifier.add(Convolution2D(filters = 32, kernel_size=(3, 3), activation = 'relu'))
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 3 - Flattening
 classifier.add(Flatten())
 
-classifier.add(Dropout(0.2))
-
 # Step 4 - Full connection
 classifier.add(Dense(units = 128, activation = 'relu'))
+
 classifier.add(Dense(units = 1, activation = 'sigmoid'))
 
 # Compiling the CNN
@@ -65,8 +65,37 @@ test_set = test_datagen.flow_from_directory('dataset/test_set',
                                             batch_size=32,
                                             class_mode='binary')
 
-classifier.fit_generator(training_set,
-                         steps_per_epoch=(8000 / training_set.batch_size),
-                         epochs=25,
-                         validation_data=test_set,
-                         validation_steps=(2000 / test_set.batch_size))
+history = classifier.fit_generator(training_set,
+                                   steps_per_epoch=(8000 / training_set.batch_size),
+                                   epochs=22,
+                                   validation_data=test_set,
+                                   validation_steps=(2000 / test_set.batch_size))
+
+history_dict = history.history
+
+# Plot training and validation loss
+import matplotlib.pyplot as plt
+
+loss_values = history_dict['loss']
+val_loss_values = history_dict['val_loss']
+epochs = range(1, len(loss_values) + 1)
+
+# "bo" is for blue dot
+plt.plot(epochs, loss_values, 'bo')
+# "b+" is for blue cross
+plt.plot(epochs, val_loss_values, 'b+')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+
+plt.show()
+
+# Plot training and validation accuracy
+plt.clf() # clear figure
+acc_values = history_dict['acc']
+val_acc_values = history_dict['val_acc']
+plt.plot(epochs, acc_values, 'bo')
+plt.plot(epochs, val_acc_values, 'b+')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+
+plt.show()
